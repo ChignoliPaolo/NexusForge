@@ -66,7 +66,7 @@ function shell() {
       <div class="nav-group-label">WORKSPACE</div>
       <nav>${navItem('overview', 'grid', 'Mission control')}${navItem('intake', 'file', 'Evidence studio', 'INPUT')}${navItem('twin', 'cube', 'Digital twin')}${navItem('futures', 'branch', 'Counterfactual lab', 'NEW')}${navItem('orders', 'shield', 'Action center', state.orders.length || '')}</nav>
       <div class="nav-group-label second">INTELLIGENCE</div>
-      <nav>${navItem('evidence', 'book', 'Evidence library')}${navItem('audit', 'activity', 'Audit trail')}${navItem('settings', 'settings', 'Connections')}</nav>
+      <nav>${navItem('evidence', 'book', 'Evidence library')}${navItem('audit', 'activity', 'Audit trail')}${navItem('settings', 'settings', 'Connections')}<a class="nav-item" href="/slides" target="_blank" rel="noopener">${icon('arrow')}<span>Pitch deck (16:9)</span><span class="nav-badge">SLIDES</span></a></nav>
       <div class="sidebar-bottom">
         <div class="principle-card"><span class="principle-icon">${icon('spark')}</span><strong>Better decisions.<br>Before the breakdown.</strong><p>Explore the future.<br>Keep a human in control.</p><button data-action="guide">Take a 90-second tour ${icon('arrow')}</button></div>
         <div class="technology-label">BUILT FOR OPEN INTELLIGENCE</div>

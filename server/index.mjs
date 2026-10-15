@@ -79,6 +79,16 @@ export function createApp(config = readConfig(), dependencies = {}) {
         const provenance = investigation.inputEvidence?.provenance === 'user_supplied' ? 'Operator-supplied evidence; authenticity is unverified.' : 'Synthetic demonstration data.';
         return json(200, { ...investigation, order: store.orderFor(investigation.id), disclosure: `${provenance} Model-derived hypotheses require qualified review. Savings are simulated, not realized.`, auditIntegrity: store.verifyAudit() });
       }
+      if (url.pathname === '/slides') {
+        const file = await readFile(resolve(projectRoot, 'presentation', 'NexusForge-Pitch-v2.html'));
+        response.writeHead(200, { ...headers, 'Content-Type': 'text/html; charset=utf-8' });
+        return response.end(file);
+      }
+      if (url.pathname === '/presentation/NexusForge-Cover.png') {
+        const file = await readFile(resolve(projectRoot, 'presentation', 'NexusForge-Cover.png'));
+        response.writeHead(200, { ...headers, 'Content-Type': 'image/png' });
+        return response.end(file);
+      }
       const allowed = { '/': 'index.html', '/app.js': 'app.js', '/style.css': 'style.css', '/studio.js': 'studio.js', '/twin.js': 'twin.js', '/icons.js': 'icons.js', '/favicon.svg': 'favicon.svg' };
       if (!allowed[url.pathname]) return json(404, { error: 'Not found.' });
       const file = await readFile(resolve(projectRoot, 'frontend', allowed[url.pathname]));

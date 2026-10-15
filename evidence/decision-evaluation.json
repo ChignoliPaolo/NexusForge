@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-15T07:49:30.455Z",
+  "generatedAt": "2026-10-15T14:17:24.691Z",
   "suite": "Synthetic decision-contract evaluation v3",
   "checks": [
     {
@@ -397,7 +397,7 @@
   ],
   "total": 44,
   "passed": 44,
-  "elapsedMs": 9.71,
+  "elapsedMs": 8.02,
   "disclosure": "Synthetic authored cases and seeded perturbations. This evaluates declared decision contracts, not field accuracy or AMD model quality. Fixture design and solver share engineering assumptions; this is not an independent scientific benchmark.",
   "liveModelEvaluated": false
 }
