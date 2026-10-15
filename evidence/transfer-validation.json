@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "checks": 184,
+  "coverage": [
+    "ZIP CRC and archive SHA-256",
+    "public/private secret policy",
+    "payload hashes",
+    "exact private env decryption",
+    "wrong password",
+    "existing-env preservation",
+    "symlink rejection",
+    "tampered payload",
+    "restored application tests",
+    "restored standalone build"
+  ],
+  "note": "Local restore validation. No real provider calls, browser rendering or email-provider delivery is implied."
+}

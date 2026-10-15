@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexusForge — Industrial Decision Twin | AMD × Evolus Hackathon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #07080c;
+      --bg-card: rgba(17, 20, 29, 0.78);
+      --bg-card-strong: rgba(23, 27, 39, 0.92);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-violet: rgba(182, 146, 246, 0.38);
+      --text-main: #f3f5f8;
+      --text-muted: #949db1;
+      --text-dim: #5e677a;
+      --accent-violet: #b692f6;
+      --accent-violet-glow: rgba(182, 146, 246, 0.18);
+      --accent-amber: #f59e0b;
+      --accent-emerald: #10b981;
+      --accent-cyan: #38bdf8;
+      --accent-rose: #f43f5e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-deep);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Navigation controls for live presentation */
+    .deck-nav {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      display: flex;
+      gap: 8px;
+      background: rgba(10, 12, 18, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-subtle);
+      padding: 8px 14px;
+      border-radius: 999px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+
+    .deck-nav a {
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+
+    .deck-nav a:hover {
+      color: var(--text-main);
+      background: rgba(182, 146, 246, 0.15);
+    }
+
+    /* Slide Container (16:9 Aspect Ratio) */
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      min-height: 760px;
+      padding: 44px 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border-subtle);
+      background-image: 
+        radial-gradient(circle at 82% 22%, rgba(182, 146, 246, 0.11) 0%, transparent 42%),
+        radial-gradient(circle at 18% 85%, rgba(56, 189, 248, 0.06) 0%, transparent 38%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+      page-break-after: always;
+    }
+
+    /* Top & Bottom Bars */
+    .topbar, .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 2;
+    }
+
+    .topbar {
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .footer {
+      padding-top: 18px;
+      border-top: 1px solid var(--border-subtle);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 0.06em;
+    }
+
+    .brand-star {
+      width: 24px;
+      height: 24px;
+      color: var(--accent-violet);
+      filter: drop-shadow(0 0 8px rgba(182, 146, 246, 0.6));
+    }
+
+    .track-badges {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+    }
+
+    .pill {
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .pill.amd {
+      border-color: rgba(16, 185, 129, 0.35);
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.08);
+    }
+
+    .pill.evolus {
+      border-color: var(--border-violet);
+      color: var(--accent-violet);
+      background: var(--accent-violet-glow);
+    }
+
+    /* Typography */
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-violet);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-violet);
+      box-shadow: 0 0 10px var(--accent-violet);
+    }
+
+    h1 {
+      font-size: clamp(48px, 5.4vw, 78px);
+      font-weight: 800;
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+    }
+
+    h2 {
+      font-size: clamp(38px, 4.2vw, 62px);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.025em;
+      margin-bottom: 28px;
+    }
+
+    .gradient-violet {
+      background: linear-gradient(135deg, #d8b4fe 0%, #a855f7 55%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 22px;
+      line-height: 1.5;
+      color: var(--text-muted);
+      max-width: 580px;
+      margin-top: 24px;
+    }
+
+    /* Layout Grids */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 2;
+      padding: 20px 0;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .grid-2-equal {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 30px;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    .card.highlight-violet {
+      border-color: var(--border-violet);
+      box-shadow: 0 20px 60px rgba(182, 146, 246, 0.1);
+    }
+
+    .card.highlight-amber {
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+
+    .card.highlight-emerald {
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+
+    .card-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .big-metric {
+      font-size: clamp(54px, 5.5vw, 84px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin: 12px 0 16px 0;
+    }
+
+    /* Progress Bars (Slide 3) */
+    .hypo-row {
+      margin-bottom: 18px;
+    }
+    .hypo-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .hypo-score {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+    }
+    .bar-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: var(--text-dim);
+    }
+    .bar-fill.active {
+      background: linear-gradient(90deg, #a855f7, #d8b4fe);
+      box-shadow: 0 0 14px rgba(182, 146, 246, 0.6);
+    }
+
+    /* Banner Strip */
+    .info-banner {
+      margin-top: 24px;
+      padding: 20px 28px;
+      border-radius: 14px;
+      background: rgba(182, 146, 246, 0.08);
+      border: 1px solid var(--border-violet);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .step-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      background: rgba(182, 146, 246, 0.14);
+      border: 1px solid var(--border-violet);
+      color: var(--accent-violet);
+      margin-bottom: 20px;
+    }
+
+    /* Print Rules for PDF Export */
+    @media print {
+      .deck-nav { display: none !important; }
+      body { background: #07080c; }
+      .slide {
+        width: 100vw;
+        height: 100vh;
+        border: none;
+        page-break-after: always;
+        break-after: page;
+      }
+      @page {
+        size: 16in 9in;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Pill (Hidden on PDF Print) -->
+  <nav class="deck-nav">
+    <a href="#slide-1">01 Premise</a>
+    <a href="#slide-2">02 Problem</a>
+    <a href="#slide-3">03 Method</a>
+    <a href="#slide-4">04 ROI & Constraints</a>
+    <a href="#slide-5">05 AMD × Evolus Stack</a>
+    <a href="#slide-6">06 Live Demo</a>
+  </nav>
+
+  <!-- ==========================================
+       SLIDE 1: THE PREMISE
+       ========================================== -->
+  <section class="slide" id="slide-1">
+    <div class="topbar">
+      <div class="brand">
+        <svg class="brand-star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L14.8 9.2L23 12L14.8 14.8L12 23L9.2 14.8L1 12L9.2 9.2L12 1Z"/></svg>
+        NEXUSFORGE
+      </div>
+      <div class="track-badges">
+        <span class="pill amd">Powered by AMD Instinct & ROCm</span>
+        <span class="pill evolus">Evolus Business Agents</span>
+        <span class="pill">Intelligent Industry</span>
+      </div>
+    </div>
+
+    <div class="slide-body">
+      <div class="grid-2">
+        <div>
+          <div class="eyebrow">Industrial Decision Intelligence Twin</div>
+          <h1>
+            Don't predict<br/>
+            the breakdown.<br/>
+            <span class="gradient-violet">Change<br/>the outcome.</span>
+          </h1>
+          <p class="subtitle">
+            Challenge the root cause. Respect physical inventory & safety constraints. Keep the plant operator in control.
+          </p>
+        </div>
+
+        <!-- Isometric Digital Twin Card + Telemetry Overlay -->
+        <div class="card highlight-violet" style="padding: 34px;">
+          <div class="card-tag">
+            <span>FACTORY DIGITAL TWIN // ASSEMBLY LINE 01</span>
+            <span style="color: var(--accent-amber);">● ALERT: PN-12 CASCADE</span>
+          </div>
+
+          <!-- Clean SVG Isometric Representation of the Line -->
+          <svg viewBox="0 0 520 250" width="100%" style="margin: 10px 0 20px 0;">
+            <defs>
+              <linearGradient id="isoGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#c084fc" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#6366f1" stop-opacity="0.4"/>
+              </linearGradient>
+              <linearGradient id="alertGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.95"/>
+                <stop offset="100%" stop-color="#ef4444" stop-opacity="0.5"/>
+              </linearGradient>
+            </defs>
+            <!-- Isometric Grid Base -->
+            <polygon points="40,175 260,65 480,175 260,245" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <!-- Conveyor Backbone -->
+            <line x1="95" y1="165" x2="415" y2="105" stroke="rgba(182,146,246,0.4)" stroke-width="8" stroke-linecap="round"/>
+            <line x1="95" y1="165" x2="415" y2="105" stroke="#b692f6" stroke-width="2" stroke-dasharray="6 6"/>
+
+            <!-- Station 1: Feeder FD-01 -->
+            <rect x="75" y="135" width="46" height="46" rx="8" fill="url(#isoGrad)" stroke="#e9d5ff" stroke-width="1.5"/>
+            <text x="98" y="125" fill="#949db1" font-family="JetBrains Mono" font-size="10" text-anchor="middle">FD-01</text>
+
+            <!-- Station 2: Upstream Pneumatic Unit PN-12 (HIGHLIGHTED SOURCE) -->
+            <circle cx="215" cy="188" r="34" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 4"/>
+            <rect x="193" y="166" width="44" height="44" rx="8" fill="url(#alertGrad)" stroke="#fde68a" stroke-width="2"/>
+            <text x="215" y="228" fill="#fbbf24" font-family="JetBrains Mono" font-weight="700" font-size="11" text-anchor="middle">PN-12 (3.8 bar)</text>
+
+            <!-- Causal Dependency Arrow -->
+            <path d="M 215 164 Q 205 125 225 115" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 3"/>
+
+            <!-- Station 3: Robot Arm RB-04 (Downstream Victim) -->
+            <rect x="210" y="90" width="52" height="46" rx="8" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+            <text x="236" y="80" fill="#f3f5f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">RB-04 (Torque ↑)</text>
+
+            <!-- Station 4: Vision Portal VI-02 -->
+            <rect x="315" y="75" width="56" height="52" rx="8" fill="url(#isoGrad)" stroke="#e9d5ff" stroke-width="1.5"/>
+            <text x="343" y="65" fill="#949db1" font-family="JetBrains Mono" font-size="10" text-anchor="middle">VI-02</text>
+
+            <!-- Station 5: Packager PK-01 -->
+            <rect x="405" y="65" width="44" height="44" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <text x="427" y="55" fill="#949db1" font-family="JetBrains Mono" font-size="10" text-anchor="middle">PK-01</text>
+          </svg>
+
+          <div style="background: rgba(10, 12, 18, 0.9); border: 1px solid var(--border-violet); border-radius: 12px; padding: 18px 22px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent-violet); margin-bottom: 4px;">✦ NEXT BEST MOVE // ENTROPY REDUCTION</div>
+              <div style="font-size: 19px; font-weight: 700;">Ask for the missing discriminating observation.</div>
+            </div>
+            <span class="pill evolus">0.624 bits</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>EVIDENCE-BOUND INDUSTRIAL REASONING // HUMAN-IN-THE-LOOP GOVERNANCE</span>
+      <span>THE PREMISE / 01</span>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SLIDE 2: THE PROBLEM
+       ========================================== -->
+  <section class="slide" id="slide-2">
+    <div class="topbar">
+      <div class="brand">
+        <svg class="brand-star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L14.8 9.2L23 12L14.8 14.8L12 23L9.2 14.8L1 12L9.2 9.2L12 1Z"/></svg>
+        NEXUSFORGE
+      </div>
+      <div class="track-badges">
+        <span class="pill">Root-Cause Cascade vs Surface Symptom</span>
+      </div>
+    </div>
+
+    <div class="slide-body">
+      <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 36px; align-items: end; margin-bottom: 36px;">
+        <div>
+          <div class="eyebrow">For the Line Supervisor Under Production Pressure</div>
+          <h2 style="margin-bottom: 0;">The alarm is not<br/>the explanation.</h2>
+        </div>
+        <div class="card" style="padding: 20px 24px;">
+          <div class="card-tag" style="margin-bottom: 8px;">
+            <span>TELEMETRY SIGNATURE: PRESSURE DROP → TORQUE SPIKE</span>
+            <span style="color: var(--accent-violet);">CSV + HANDBOOK</span>
+          </div>
+          <svg viewBox="0 0 360 70" width="100%">
+            <line x1="0" y1="20" x2="360" y2="20" stroke="rgba(255,255,255,0.06)"/>
+            <line x1="0" y1="50" x2="360" y2="50" stroke="rgba(255,255,255,0.06)"/>
+            <!-- Pressure dropping -->
+            <path d="M 10 15 L 90 22 L 180 38 L 270 52 L 350 62" fill="none" stroke="#b692f6" stroke-width="3"/>
+            <!-- Torque rising -->
+            <path d="M 10 58 L 90 54 L 180 40 L 270 24 L 350 12" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="5 4"/>
+          </svg>
+          <div style="display:flex; justify-content:space-between; font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--text-muted);">
+            <span style="color:#b692f6;">━ Manifold Pressure (3.8 bar ↓)</span>
+            <span style="color:#f59e0b;">┅ Drive Motor Torque (112% ↑)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2-equal">
+        <div class="card highlight-violet">
+          <div class="card-tag">
+            <span>01 // UPSTREAM ROOT CAUSE POSSIBILITY (PN-12)</span>
+            <span class="pill evolus">Verify First</span>
+          </div>
+          <div class="big-metric" style="color: var(--accent-violet);">€18.50</div>
+          <div style="font-size: 22px; font-weight: 600; margin-bottom: 8px;">Pneumatic Viton Seal Replacement</div>
+          <p style="color: var(--text-muted); font-size: 16px; line-height: 1.5;">
+            A minor upstream pneumatic leak starves pressure on Assembly Line 01, forcing the downstream actuator to overwork. <strong>30 minutes downtime</strong> once verified by a single local gauge check.
+          </p>
+        </div>
+
+        <div class="card highlight-amber">
+          <div class="card-tag">
+            <span>02 // NAIVE DOWNSTREAM ALARM REACTION (RB-04)</span>
+            <span class="pill" style="color: var(--accent-amber); border-color: rgba(245,158,11,0.4);">False Target</span>
+          </div>
+          <div class="big-metric" style="color: #fbbf24;">€2,450</div>
+          <div style="font-size: 22px; font-weight: 600; margin-bottom: 8px;">Robot Servo Drive Replacement</div>
+          <p style="color: var(--text-muted); font-size: 16px; line-height: 1.5;">
+            Conventional threshold alerts trigger on the downstream motor overload. Replacing the motor wastes <strong>210 minutes of line downtime</strong> and €2,450—while leaving the upstream leak untouched.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>CONVENTIONAL CHATBOTS SUMMARIZE ALARMS // NEXUSFORGE SEPARATES SYMPTOM FROM ROOT CAUSE</span>
+      <span>THE PROBLEM / 02</span>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SLIDE 3: THE METHOD (ACTIVE DIAGNOSIS)
+       ========================================== -->
+  <section class="slide" id="slide-3">
+    <div class="topbar">
+      <div class="brand">
+        <svg class="brand-star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L14.8 9.2L23 12L14.8 14.8L12 23L9.2 14.8L12 23L9.2 14.8L1 12L9.2 9.2L12 1Z"/></svg>
+        NEXUSFORGE
+      </div>
+      <div class="track-badges">
+        <span class="pill evolus">Counterfactual Lab</span>
+        <span class="pill">Information-Theoretic Triage</span>
+      </div>
+    </div>
+
+    <div class="slide-body">
+      <div class="eyebrow">Active Diagnosis // Reduce Uncertainty Before Spending</div>
+      <h2>One observation. A different decision.</h2>
+
+      <div style="display: grid; grid-template-columns: 1fr 48px 1fr; gap: 20px; align-items: center;">
+        <!-- Before Test -->
+        <div class="card">
+          <div class="card-tag">
+            <span>01 // BEFORE DISCRIMINATING TEST (HIGH ENTROPY)</span>
+            <span>AMBIGUOUS</span>
+          </div>
+          <div class="hypo-row">
+            <div class="hypo-header"><span>Pneumatic leakage (PN-12)</span><span class="hypo-score">51 / 100</span></div>
+            <div class="bar-track"><div class="bar-fill active" style="width: 51%;"></div></div>
+          </div>
+          <div class="hypo-row">
+            <div class="hypo-header"><span>Regulator instability</span><span class="hypo-score">33 / 100</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width: 33%;"></div></div>
+          </div>
+          <div class="hypo-row">
+            <div class="hypo-header"><span>Sensor measurement discrepancy</span><span class="hypo-score">13 / 100</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width: 13%;"></div></div>
+          </div>
+          <div class="hypo-row" style="margin-bottom:0;">
+            <div class="hypo-header"><span>Independent robot drive fault (RB-04)</span><span class="hypo-score">03 / 100</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width: 3%;"></div></div>
+          </div>
+        </div>
+
+        <div style="text-align: center; font-size: 28px; color: var(--accent-violet);">→</div>
+
+        <!-- After Test -->
+        <div class="card highlight-violet">
+          <div class="card-tag">
+            <span>02 // AFTER OPERATOR LEAK VERIFICATION</span>
+            <span style="color: var(--accent-emerald);">● VERIFIED</span>
+          </div>
+          <div class="hypo-row">
+            <div class="hypo-header"><span><strong>Pneumatic leakage (PN-12)</strong></span><span class="hypo-score" style="color:var(--accent-violet); font-weight:700;">91 / 100</span></div>
+            <div class="bar-track"><div class="bar-fill active" style="width: 91%;"></div></div>
+          </div>
+          <div class="hypo-row">
+            <div class="hypo-header"><span>Regulator instability</span><span class="hypo-score">08 / 100</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width: 8%;"></div></div>
+          </div>
+          <div class="hypo-row" style="margin-bottom:0;">
+            <div class="hypo-header"><span>Sensor measurement discrepancy</span><span class="hypo-score">01 / 100</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width: 1%;"></div></div>
+          </div>
+          <div class="hypo-row" style="margin-bottom:0;">
+            <div class="hypo-header"><span>Independent robot drive fault (RB-04)</span><span class="hypo-score">00 / 100</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width: 0%;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-banner">
+        <div style="display: flex; align-items: center; gap: 22px;">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 800; color: var(--accent-violet);">0.624 bits</div>
+          <div style="font-size: 18px; color: var(--text-main);">
+            <strong>Expected Information Gain</strong> selects the single quickest physical check for the technician—never hallucinating certainty when two causes compete.
+          </div>
+        </div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted); white-space: nowrap;">
+          IG(C; Y) = H(C) − E[H(C | Y)]
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>DETERMINISTIC ENTROPY REDUCTION COMBINED WITH OPEN-MODEL EVIDENCE EXTRACTION</span>
+      <span>THE METHOD / 03</span>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SLIDE 4: THE DIFFERENCE (CONSTRAINTS & ROI)
+       ========================================== -->
+  <section class="slide" id="slide-4">
+    <div class="topbar">
+      <div class="brand">
+        <svg class="brand-star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L14.8 9.2L23 12L14.8 14.8L12 23L9.2 14.8L1 12L9.2 9.2L12 1Z"/></svg>
+        NEXUSFORGE
+      </div>
+      <div class="track-badges">
+        <span class="pill">8 Adversarial Scenarios</span>
+        <span class="pill amd">Measurable Business ROI</span>
+      </div>
+    </div>
+
+    <div class="slide-body">
+      <div class="eyebrow">Not a Scripted Answer // A Decision Engine You Can Challenge</div>
+      <h2>Change the constraints. Watch the decision adapt.</h2>
+
+      <div class="grid-4" style="margin-bottom: 32px;">
+        <div class="card" style="padding: 24px;">
+          <div class="step-badge">01</div>
+          <div style="font-size: 15px; color: var(--text-muted); margin-bottom: 6px;">No test result yet</div>
+          <div style="font-size: 24px; font-weight: 800; margin-bottom: 12px;">Inspect first</div>
+          <p style="font-size: 14px; color: var(--text-dim);">Blocks premature part replacement until the 5-minute leak verification is logged.</p>
+        </div>
+
+        <div class="card highlight-violet" style="padding: 24px;">
+          <div class="step-badge">02</div>
+          <div style="font-size: 15px; color: var(--text-muted); margin-bottom: 6px;">Leak confirmed + Stock &gt; 0</div>
+          <div style="font-size: 24px; font-weight: 800; color: var(--accent-violet); margin-bottom: 12px;">Repair eligible</div>
+          <p style="font-size: 14px; color: var(--text-muted);">Dispatches targeted PN-12 seal replacement work order via Evolus workflow.</p>
+        </div>
+
+        <div class="card highlight-amber" style="padding: 24px;">
+          <div class="step-badge" style="color:var(--accent-amber); border-color:rgba(245,158,11,0.4); background:rgba(245,158,11,0.1);">03</div>
+          <div style="font-size: 15px; color: var(--text-muted); margin-bottom: 6px;">Warehouse Stock = 0</div>
+          <div style="font-size: 24px; font-weight: 800; color: #fbbf24; margin-bottom: 12px;">Block repair</div>
+          <p style="font-size: 14px; color: var(--text-muted);">Diagnosis ≠ recovery. Never teardown a machine if the spare part is out of stock.</p>
+        </div>
+
+        <div class="card highlight-emerald" style="padding: 24px;">
+          <div class="step-badge" style="color:var(--accent-emerald); border-color:rgba(16,185,129,0.4); background:rgba(16,185,129,0.1);">04</div>
+          <div style="font-size: 15px; color: var(--text-muted); margin-bottom: 6px;">Thermal Safety Breach</div>
+          <div style="font-size: 24px; font-weight: 800; color: #34d399; margin-bottom: 12px;">Hard Escalate</div>
+          <p style="font-size: 14px; color: var(--text-muted);">Deterministic safety policy overrides LLM optimization when cabinet temp spikes.</p>
+        </div>
+      </div>
+
+      <div class="card" style="padding: 24px 34px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: baseline; gap: 28px;">
+          <div style="font-size: 64px; font-weight: 800; color: var(--accent-violet); letter-spacing: -0.03em;">€11,439</div>
+          <div>
+            <div style="font-size: 22px; font-weight: 700; margin-bottom: 4px;">Saved per avoided misdiagnosis incident</div>
+            <div style="font-size: 15px; color: var(--text-muted);">
+              <strong>€13,036</strong> naive reactive teardown (210 min downtime + motor) vs <strong>€1,597</strong> verified seal replacement (30 min downtime).
+            </div>
+          </div>
+        </div>
+        <div class="pill amd" style="font-size: 13px; padding: 8px 16px;">−85% Downtime</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>QUANTIFIED VALUE ACROSS DOWNTIME, SPARE PARTS INVENTORY, AND SAFETY COMPLIANCE</span>
+      <span>THE DIFFERENCE / 04</span>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SLIDE 5: THE ARCHITECTURE (AMD + EVOLUS)
+       ========================================== -->
+  <section class="slide" id="slide-5">
+    <div class="topbar">
+      <div class="brand">
+        <svg class="brand-star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L14.8 9.2L23 12L14.8 14.8L12 23L9.2 14.8L1 12L9.2 9.2L12 1Z"/></svg>
+        NEXUSFORGE
+      </div>
+      <div class="track-badges">
+        <span class="pill amd">AMD Developer Cloud + ROCm vLLM</span>
+        <span class="pill evolus">Evolus REST APIs & Workflows</span>
+      </div>
+    </div>
+
+    <div class="slide-body">
+      <div class="eyebrow">Open Models. Deterministic Constraints. A Human Signature.</div>
+      <h2>Intelligence proposes. Policy constrains.</h2>
+
+      <div class="grid-3" style="margin-bottom: 30px;">
+        <!-- Col 1: Evidence & Ingestion -->
+        <div class="card">
+          <div class="card-tag">
+            <span>01 // EVIDENCE & EXTRACTION</span>
+            <span style="color: var(--accent-violet);">EVOLUS</span>
+          </div>
+          <div style="font-size: 21px; font-weight: 700; margin-bottom: 6px;">Telemetry CSV + Manuals</div>
+          <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle);">
+            Ingests multi-sensor time series (`pressure_bar`, `torque_pct`, `temp_c`) alongside technical maintenance handbooks.
+          </p>
+          <div style="font-size: 21px; font-weight: 700; margin-bottom: 6px;">Evolus Libraries & Extractors</div>
+          <p style="font-size: 14px; color: var(--text-muted);">
+            Uses <strong>Evolus Document Extractors</strong> & <strong>Knowledge Libraries</strong> via REST API to ground every hypothesis in exact manual citations.
+          </p>
+        </div>
+
+        <!-- Col 2: AMD Inference & Math -->
+        <div class="card highlight-emerald">
+          <div class="card-tag">
+            <span>02 // REASONING & SOLVER</span>
+            <span style="color: #34d399;">AMD INSTINCT GPU</span>
+          </div>
+          <div style="font-size: 21px; font-weight: 700; margin-bottom: 6px;">AMD-Hosted Open Model</div>
+          <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle);">
+            Powered by open-weight models (<strong>DeepSeek / Qwen on AMD ROCm vLLM</strong>) for 100% air-gapped industrial data privacy.
+          </p>
+          <div style="font-size: 21px; font-weight: 700; margin-bottom: 6px;">Deterministic Constraint Engine</div>
+          <p style="font-size: 14px; color: var(--text-muted);">
+            Computes Shannon entropy reduction (`0.624 bits`), checks spare-part stock, lead times (180m) vs production deadlines (90m).
+          </p>
+        </div>
+
+        <!-- Col 3: Action & Audit -->
+        <div class="card highlight-violet">
+          <div class="card-tag">
+            <span>03 // ACCOUNTABILITY & ACTION</span>
+            <span style="color: var(--accent-violet);">WORKFLOW API</span>
+          </div>
+          <div style="font-size: 21px; font-weight: 700; margin-bottom: 6px;">Named Human Sign-Off</div>
+          <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle);">
+            Zero autonomous plant writes. Requires explicit supervisor review and checklist verification before dispatch.
+          </p>
+          <div style="font-size: 21px; font-weight: 700; margin-bottom: 6px;">Evolus Workflow Execution</div>
+          <p style="font-size: 14px; color: var(--text-muted);">
+            Triggers `POST /api/v1/workflows/{id}/execute` to emit structured JSON Work Orders (`NF-3A65A7CA`) to ERP/procurement.
+          </p>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 24px;">
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <div style="font-size: 52px; font-weight: 800; color: var(--accent-emerald); font-family: 'JetBrains Mono', monospace;">44/44</div>
+          <div style="font-size: 16px; color: var(--text-muted);">
+            <strong>Automated Decision-Contract Checks Passed</strong><br/>
+            Zero ungrounded claims · Strict schema validation · Full audit trail
+          </div>
+        </div>
+
+        <div style="padding: 14px 24px; border-radius: 12px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.4); font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #34d399;">
+          ● AMD ROCm vLLM + Evolus REST APIs: End-to-End Integrated
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>100% OPEN-WEIGHT PRIVACY ON AMD GPUS // ENTERPRISE ORCHESTRATION ON EVOLUS</span>
+      <span>THE SYSTEM / 05</span>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SLIDE 6: CALL TO ACTION / LIVE DEMO
+       ========================================== -->
+  <section class="slide" id="slide-6">
+    <div class="topbar">
+      <div class="brand">
+        <svg class="brand-star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L14.8 9.2L23 12L14.8 14.8L12 23L9.2 14.8L1 12L9.2 9.2L12 1Z"/></svg>
+        NEXUSFORGE
+      </div>
+      <div class="track-badges">
+        <span class="pill amd">Ready for Live Inspection</span>
+      </div>
+    </div>
+
+    <div class="slide-body">
+      <div class="grid-2">
+        <div>
+          <div class="eyebrow">From a Presentation to a Verifiable Decision</div>
+          <h1>
+            Your evidence.<br/>
+            Your constraints.<br/>
+            <span class="gradient-violet">Your next move.</span>
+          </h1>
+          <p class="subtitle">
+            Don't take a static slide deck's word for it. Challenge the live engine with contradictory telemetry or zero warehouse inventory.
+          </p>
+          <div style="margin-top: 36px; display: inline-flex; align-items: center; gap: 14px; background: linear-gradient(135deg, #c084fc, #818cf8); color: #07080c; font-weight: 800; font-size: 20px; padding: 18px 34px; border-radius: 14px; box-shadow: 0 15px 40px rgba(182, 146, 246, 0.35);">
+            <span>✦ Let's challenge the live demo</span>
+          </div>
+        </div>
+
+        <div class="card highlight-violet" style="padding: 36px;">
+          <div class="card-tag" style="margin-bottom: 28px;">
+            <span>INTERACTIVE DEMO WALKTHROUGH // 90 SECONDS</span>
+            <span class="pill evolus">Live App</span>
+          </div>
+
+          <div style="display: flex; gap: 18px; margin-bottom: 26px;">
+            <div class="step-badge" style="margin-bottom:0; flex-shrink:0;">01</div>
+            <div>
+              <div style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">Select or Upload the Evidence</div>
+              <div style="font-size: 15px; color: var(--text-muted);">Run any of the 8 adversarial engineering cases in Evidence Studio—or drop a live CSV sensor log.</div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 18px; margin-bottom: 26px;">
+            <div class="step-badge" style="margin-bottom:0; flex-shrink:0;">02</div>
+            <div>
+              <div style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">Break the Assumptions in Counterfactual Lab</div>
+              <div style="font-size: 15px; color: var(--text-muted);">Confirm the leak test, or set Spare Parts Stock = 0 and watch the solver dynamically block the teardown.</div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 18px;">
+            <div class="step-badge" style="margin-bottom:0; flex-shrink:0;">03</div>
+            <div>
+              <div style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">Approve & Trigger Evolus Dispatch</div>
+              <div style="font-size: 15px; color: var(--text-muted);">Sign off in the Action Center to execute the Evolus automation workflow and generate the JSON Work Order.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>PAOLO CHIGNOLI // NEXUSFORGE — DECISION INTELLIGENCE FOR THE OPERATOR WHO OWNS THE OUTCOME</span>
+      <span>YOUR TURN / 06</span>
+    </div>
+  </section>
+
+</body>
+</html>

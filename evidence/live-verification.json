@@ -1,0 +1,50 @@
+{
+  "checkedAt": "2026-10-14T07:40:58.200Z",
+  "status": "unverified",
+  "configuration": {
+    "amd": {
+      "configured": true,
+      "status": "Configured · not verified",
+      "missing": [],
+      "model": "DeepSeek-V4-Flash",
+      "modelDiscovery": false
+    },
+    "evolus": {
+      "configured": false,
+      "status": "Setup required",
+      "missing": [
+        "EVOLUS_AGENT_ID",
+        "EVOLUS_KNOWLEDGE_PATH",
+        "EVOLUS_EXTRACTOR_PATH",
+        "EVOLUS_WORKFLOW_PATH"
+      ]
+    },
+    "telemetry": {
+      "gpuUtilization": null,
+      "tokensPerSecond": null,
+      "note": "No hardware telemetry is exposed by this application. API timings appear only after an actual request."
+    }
+  },
+  "model": null,
+  "blocks": [],
+  "workflowExecuted": false,
+  "safety": "This command never approves a work order or invokes a business workflow.",
+  "preflight": {
+    "checkedAt": "2026-10-14T07:40:58.906Z",
+    "checks": {
+      "amd": {
+        "status": "model_configured_not_verified",
+        "model": "DeepSeek-V4-Flash",
+        "note": "Model explicitly configured; run an inference to verify availability."
+      },
+      "evolus": {
+        "status": "configuration_only",
+        "applicationConfigured": true,
+        "agentConfigured": false,
+        "blocksConfigured": false,
+        "note": "Workspace discovery and exact schema inspection: npm run verify:live. Actual building-block success requires a live investigation."
+      }
+    }
+  },
+  "error": "Provider unreachable or timed out. No external action is confirmed."
+}

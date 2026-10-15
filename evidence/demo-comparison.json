@@ -1,0 +1,553 @@
+{
+  "scenarioId": "pressure",
+  "assumptions": {
+    "downtimeRate": 48,
+    "delay": 0,
+    "unitsPerMinute": 8,
+    "scrapUnitCost": 12,
+    "energyRate": 0.28,
+    "riskWeight": 2000
+  },
+  "plans": [
+    {
+      "id": "targeted",
+      "name": "Inspect & repair the seal",
+      "tag": "Targeted intervention",
+      "minutes": 30,
+      "parts": 18.5,
+      "labor": 90,
+      "scrap": 4,
+      "energy": 2,
+      "risk": 0.08,
+      "description": "Verify the suspected leak, isolate the cell, then repair only the confirmed failed component.",
+      "part": "Demo seal kit · NF-SEAL-42",
+      "stock": 15,
+      "checks": [
+        "Qualified technician verifies the seal hypothesis",
+        "Site-approved isolation and zero-energy verification",
+        "Pressure and torque return to operating envelope"
+      ],
+      "blockedReasons": [],
+      "feasible": true,
+      "outcome": "restorative",
+      "goalTier": 2,
+      "downtime": 30,
+      "lostUnits": 240,
+      "breakdown": {
+        "downtime": 1440,
+        "parts": 18.5,
+        "labor": 90,
+        "scrap": 48,
+        "energy": 0.56
+      },
+      "cost": 1597.06,
+      "score": 1757.06,
+      "range": [
+        1379.86,
+        1814.26
+      ],
+      "savings": 11439.18,
+      "minutesSaved": 180,
+      "unitsProtected": 1440
+    },
+    {
+      "id": "inspect",
+      "name": "Isolate & diagnose first",
+      "tag": "Conservative fallback",
+      "minutes": 65,
+      "parts": 0,
+      "labor": 180,
+      "scrap": 6,
+      "energy": 3,
+      "risk": 0.04,
+      "description": "Pause the cell and run a technician-led diagnosis before committing to any replacement.",
+      "part": "No part committed",
+      "stock": null,
+      "checks": [
+        "Qualified technician accepts investigation scope",
+        "Site-approved isolation and zero-energy verification",
+        "A separate repair plan is approved after diagnosis"
+      ],
+      "blockedReasons": [],
+      "feasible": true,
+      "outcome": "diagnostic",
+      "goalTier": 1,
+      "downtime": 65,
+      "lostUnits": 520,
+      "breakdown": {
+        "downtime": 3120,
+        "parts": 0,
+        "labor": 180,
+        "scrap": 72,
+        "energy": 0.84
+      },
+      "cost": 3372.84,
+      "score": 3452.84,
+      "range": [
+        2941.12,
+        3804.56
+      ],
+      "savings": null,
+      "minutesSaved": null,
+      "unitsProtected": null,
+      "costScope": "Diagnostic stage only; restoration cost and downtime remain unknown."
+    },
+    {
+      "id": "replace",
+      "name": "Replace the servo drive",
+      "tag": "Conventional response",
+      "minutes": 210,
+      "parts": 2450,
+      "labor": 360,
+      "scrap": 12,
+      "energy": 8,
+      "risk": 0.22,
+      "description": "Replace the alarmed component without first resolving the upstream pressure fault.",
+      "part": "Demo servo drive · NF-SRV-04",
+      "stock": 15,
+      "checks": [
+        "Qualified technician confirms a drive failure",
+        "Site-approved isolation and zero-energy verification",
+        "Post-intervention commissioning and pressure checks"
+      ],
+      "blockedReasons": [
+        "The conventional response has no verified physical justification in this case; comparison baseline only.",
+        "Intervention exceeds the 90-minute production constraint."
+      ],
+      "feasible": false,
+      "outcome": "restorative",
+      "goalTier": 2,
+      "downtime": 210,
+      "lostUnits": 1680,
+      "breakdown": {
+        "downtime": 10080,
+        "parts": 2450,
+        "labor": 360,
+        "scrap": 144,
+        "energy": 2.24
+      },
+      "cost": 13036.24,
+      "score": 13476.24,
+      "range": [
+        10898.3,
+        15174.18
+      ],
+      "savings": 0,
+      "minutesSaved": 0,
+      "unitsProtected": 0
+    }
+  ],
+  "recommendedId": "targeted",
+  "baselineId": "replace",
+  "provenance": "Synthetic input; computed comparison under declared engineering assumptions.",
+  "formula": "Cost = downtime × €/min + parts + labor + scrap × €/unit + incremental kWh × €/kWh. Apply feasibility and restoration-vs-diagnosis goal priority first, then rank comparable outcomes by cost + assumed risk × risk weight.",
+  "uncertaintyNote": "Illustrative sensitivity band, not a calibrated confidence interval.",
+  "horizonMinutes": 300,
+  "scenario": {
+    "id": "pressure",
+    "name": "Pressure cascade",
+    "category": "Reliability",
+    "title": "A small leak. A whole line at risk.",
+    "subtitle": "Pressure falls. Torque rises. Leakage or regulation? Ask for one discriminating observation.",
+    "assetId": "pressure",
+    "severity": "High",
+    "signal": "Pressure below operating envelope",
+    "sensor": {
+      "name": "Manifold pressure",
+      "unit": "bar",
+      "current": 3.8,
+      "nominal": 6.2,
+      "threshold": 4.2,
+      "series": [
+        6.2,
+        6.075,
+        5.98,
+        5.883,
+        5.781,
+        5.705,
+        5.57,
+        5.478,
+        5.366,
+        5.251,
+        5.164,
+        5.068,
+        4.938,
+        4.866,
+        4.775,
+        4.656,
+        4.519,
+        4.421,
+        4.319,
+        4.224,
+        4.078,
+        3.991,
+        3.935,
+        3.8
+      ]
+    },
+    "secondary": {
+      "name": "Axis torque",
+      "value": "142.0%",
+      "change": "+42.0 points over the evidence window"
+    },
+    "hypothesis": "Pneumatic leakage has the strongest relative support in the declared evidence model. This remains a hypothesis.",
+    "uncertainty": "Relative support scores and test likelihoods are declared assumptions, not calibrated probabilities. A qualified human must verify any proposed cause and procedure.",
+    "chain": [
+      {
+        "id": "seal",
+        "label": "Pneumatic leakage",
+        "detail": "Candidate upstream fault",
+        "kind": "cause"
+      },
+      {
+        "id": "pressure",
+        "label": "Pressure loss",
+        "detail": "3.8 bar · observed input",
+        "kind": "observation"
+      },
+      {
+        "id": "torque",
+        "label": "Torque increase",
+        "detail": "142.0% · observed input",
+        "kind": "observation"
+      },
+      {
+        "id": "stop",
+        "label": "Line interruption",
+        "detail": "Projected downstream effect",
+        "kind": "effect"
+      }
+    ],
+    "evidence": [
+      {
+        "id": "OBS-01",
+        "title": "The €18.50 question",
+        "source": "Reproducible synthetic CSV · generated fixture",
+        "section": "24 rows · 115s · 2026-10-17T12:42:00.000Z",
+        "text": "pressure_bar: 6.2 → 3.8. torque_pct: 100 → 142. Values were parsed and validated from the supplied CSV, not generated by the language model."
+      },
+      {
+        "id": "REF-01",
+        "title": "Planning record and engineering context",
+        "source": "Synthetic engineering handbook · not OEM guidance",
+        "section": "stock_on_hand: line 12; part_lead_minutes: line 13; repair_minutes: line 14; downtime_eur_per_minute: line 15; production_deadline_minutes: line 16",
+        "text": "# NexusForge Demonstration Engineering Handbook\n\nPROVENANCE: SYNTHETIC / NOT AN OEM DOCUMENT / NOT FIELD VALIDATED\nThis authored fixture exists to demonstrate decision support. Never use it as a real equipment procedure.\n\n## Observational model\nIn this synthetic cell, a pressure decrease accompanied by rising motor torque is consistent with loss of pneumatic support. Leakage and regulator instability compete as explanations. Torque alone does not establish a seal failure. Independent technician observations are required.\nCabinet temperature and rejected output can co-vary under cooling restriction. Either signal alone requires checking material variation or measurement errors.\nPower demand and cycle overlap can co-vary under synchronized starts. An unrelated load can produce high demand without cycle overlap.\n\n## Planning record\nstock_on_hand: 15\npart_lead_minutes: 180\nrepair_minutes: 28\ndowntime_eur_per_minute: 48\nproduction_deadline_minutes: 90\n\n## Review policy\nAll equipment work requires qualified personnel and plant-specific isolation procedures. This handbook deliberately provides no operational isolation or repair instructions. Preserve existing interlocks. High or contradictory readings require escalation, not a confident automated repair.\n\n## Commercial assumptions\nParts, durations, risk weights, and costs are illustrative. A projected cost difference is not realized savings. A recorded acknowledgement is not verified production authorization.\nThe single inventory field models availability for the intervention under consideration, not a real multi-SKU warehouse. Zero stock blocks all part-consuming alternatives; a stated lead time is not proof of delivery.\n"
+      },
+      {
+        "id": "MODEL-01",
+        "title": "Declared diagnostic model",
+        "source": "NexusForge authored engineering assumptions",
+        "section": "Evidence weighting and observation selection",
+        "text": "Declared evidence weights updated with assumed test likelihoods. Not learned or clinically/industrially calibrated probabilities. Information gain is model-dependent."
+      },
+      {
+        "id": "TEST-01",
+        "title": "Operator-supplied diagnostic observation",
+        "source": "Synthetic what-if observation · not a performed test",
+        "section": "leak_confirmed",
+        "text": "The reviewer supplied leak_confirmed. This application did not perform a physical test. This assertion updates the assumed likelihood model and is retained in the evidence pack."
+      }
+    ],
+    "plans": [
+      {
+        "id": "targeted",
+        "name": "Inspect & repair the seal",
+        "tag": "Targeted intervention",
+        "minutes": 30,
+        "parts": 18.5,
+        "labor": 90,
+        "scrap": 4,
+        "energy": 2,
+        "risk": 0.08,
+        "description": "Verify the suspected leak, isolate the cell, then repair only the confirmed failed component.",
+        "part": "Demo seal kit · NF-SEAL-42",
+        "stock": 15,
+        "checks": [
+          "Qualified technician verifies the seal hypothesis",
+          "Site-approved isolation and zero-energy verification",
+          "Pressure and torque return to operating envelope"
+        ],
+        "blockedReasons": [],
+        "feasible": true,
+        "outcome": "restorative",
+        "goalTier": 2
+      },
+      {
+        "id": "replace",
+        "name": "Replace the servo drive",
+        "tag": "Conventional response",
+        "minutes": 210,
+        "parts": 2450,
+        "labor": 360,
+        "scrap": 12,
+        "energy": 8,
+        "risk": 0.22,
+        "description": "Replace the alarmed component without first resolving the upstream pressure fault.",
+        "part": "Demo servo drive · NF-SRV-04",
+        "stock": 15,
+        "checks": [
+          "Qualified technician confirms a drive failure",
+          "Site-approved isolation and zero-energy verification",
+          "Post-intervention commissioning and pressure checks"
+        ],
+        "blockedReasons": [
+          "The conventional response has no verified physical justification in this case; comparison baseline only.",
+          "Intervention exceeds the 90-minute production constraint."
+        ],
+        "feasible": false,
+        "outcome": "restorative",
+        "goalTier": 2
+      },
+      {
+        "id": "inspect",
+        "name": "Isolate & diagnose first",
+        "tag": "Conservative fallback",
+        "minutes": 65,
+        "parts": 0,
+        "labor": 180,
+        "scrap": 6,
+        "energy": 3,
+        "risk": 0.04,
+        "description": "Pause the cell and run a technician-led diagnosis before committing to any replacement.",
+        "part": "No part committed",
+        "stock": null,
+        "checks": [
+          "Qualified technician accepts investigation scope",
+          "Site-approved isolation and zero-energy verification",
+          "A separate repair plan is approved after diagnosis"
+        ],
+        "blockedReasons": [],
+        "feasible": true,
+        "outcome": "diagnostic",
+        "goalTier": 1
+      }
+    ],
+    "baseline": "replace",
+    "baselineOee": 94.2,
+    "affected": [
+      "pressure",
+      "robot",
+      "vision"
+    ],
+    "planningFields": {
+      "stock_on_hand": 15,
+      "part_lead_minutes": 180,
+      "repair_minutes": 28,
+      "downtime_eur_per_minute": 48,
+      "production_deadline_minutes": 90
+    },
+    "decisionContext": {
+      "caseId": "pressure-leak",
+      "name": "The €18.50 question",
+      "provenance": "synthetic",
+      "reasoning": {
+        "hypotheses": [
+          {
+            "id": "seal",
+            "label": "Pneumatic leakage",
+            "explanation": "pressure_bar and torque_pct rise/fall together",
+            "weight": 0.9136969120318312
+          },
+          {
+            "id": "regulator",
+            "label": "Regulator instability",
+            "explanation": "A supply fault can also lower manifold pressure",
+            "weight": 0.07564224548049477
+          },
+          {
+            "id": "sensor",
+            "label": "Pressure measurement discrepancy",
+            "explanation": "Pressure loss without matching torque response",
+            "weight": 0.007687483781679783
+          },
+          {
+            "id": "drive",
+            "label": "Independent drive or mechanical fault",
+            "explanation": "Elevated torque without pressure loss",
+            "weight": 0.002973358705994292
+          }
+        ],
+        "tests": [
+          {
+            "id": "leak",
+            "name": "Obtain an independent leak-verification result",
+            "positive": "leak_confirmed",
+            "negative": "pressure_holds",
+            "positiveLabel": "Leak independently confirmed",
+            "negativeLabel": "Pressure holds; leak not found",
+            "likelihoods": [
+              0.94,
+              0.12,
+              0.05,
+              0.03
+            ]
+          },
+          {
+            "id": "drive",
+            "name": "Obtain the technician’s independent drive assessment",
+            "positive": "drive_confirmed",
+            "negative": "drive_cleared",
+            "positiveLabel": "Drive fault independently confirmed",
+            "negativeLabel": "Drive assessment normal",
+            "likelihoods": [
+              0.08,
+              0.08,
+              0.92,
+              0.05
+            ]
+          }
+        ],
+        "nextObservation": {
+          "id": "drive",
+          "name": "Obtain the technician’s independent drive assessment",
+          "positive": "drive_confirmed",
+          "negative": "drive_cleared",
+          "positiveLabel": "Drive fault independently confirmed",
+          "negativeLabel": "Drive assessment normal",
+          "likelihoods": [
+            0.08,
+            0.08,
+            0.92,
+            0.05
+          ],
+          "informationGainBits": 0.009
+        },
+        "testResult": "leak_confirmed",
+        "disagreement": false,
+        "safetyHold": false,
+        "nominal": false,
+        "needsMoreEvidence": false,
+        "signalStrength": 1,
+        "label": "Evidence updated",
+        "method": "Declared evidence weights updated with assumed test likelihoods. Not learned or clinically/industrially calibrated probabilities. Information gain is model-dependent."
+      },
+      "constraints": {
+        "stock": 15,
+        "leadMinutes": 180,
+        "deadlineMinutes": 90,
+        "testResult": "leak_confirmed"
+      },
+      "extractionReferences": [
+        {
+          "field": "stock_on_hand",
+          "value": 15,
+          "line": 12,
+          "excerpt": "stock_on_hand: 15"
+        },
+        {
+          "field": "part_lead_minutes",
+          "value": 180,
+          "line": 13,
+          "excerpt": "part_lead_minutes: 180"
+        },
+        {
+          "field": "repair_minutes",
+          "value": 28,
+          "line": 14,
+          "excerpt": "repair_minutes: 28"
+        },
+        {
+          "field": "downtime_eur_per_minute",
+          "value": 48,
+          "line": 15,
+          "excerpt": "downtime_eur_per_minute: 48"
+        },
+        {
+          "field": "production_deadline_minutes",
+          "value": 90,
+          "line": 16,
+          "excerpt": "production_deadline_minutes: 90"
+        }
+      ]
+    }
+  },
+  "reasoning": {
+    "hypotheses": [
+      {
+        "id": "seal",
+        "label": "Pneumatic leakage",
+        "explanation": "pressure_bar and torque_pct rise/fall together",
+        "weight": 0.9136969120318312
+      },
+      {
+        "id": "regulator",
+        "label": "Regulator instability",
+        "explanation": "A supply fault can also lower manifold pressure",
+        "weight": 0.07564224548049477
+      },
+      {
+        "id": "sensor",
+        "label": "Pressure measurement discrepancy",
+        "explanation": "Pressure loss without matching torque response",
+        "weight": 0.007687483781679783
+      },
+      {
+        "id": "drive",
+        "label": "Independent drive or mechanical fault",
+        "explanation": "Elevated torque without pressure loss",
+        "weight": 0.002973358705994292
+      }
+    ],
+    "tests": [
+      {
+        "id": "leak",
+        "name": "Obtain an independent leak-verification result",
+        "positive": "leak_confirmed",
+        "negative": "pressure_holds",
+        "positiveLabel": "Leak independently confirmed",
+        "negativeLabel": "Pressure holds; leak not found",
+        "likelihoods": [
+          0.94,
+          0.12,
+          0.05,
+          0.03
+        ]
+      },
+      {
+        "id": "drive",
+        "name": "Obtain the technician’s independent drive assessment",
+        "positive": "drive_confirmed",
+        "negative": "drive_cleared",
+        "positiveLabel": "Drive fault independently confirmed",
+        "negativeLabel": "Drive assessment normal",
+        "likelihoods": [
+          0.08,
+          0.08,
+          0.92,
+          0.05
+        ]
+      }
+    ],
+    "nextObservation": {
+      "id": "drive",
+      "name": "Obtain the technician’s independent drive assessment",
+      "positive": "drive_confirmed",
+      "negative": "drive_cleared",
+      "positiveLabel": "Drive fault independently confirmed",
+      "negativeLabel": "Drive assessment normal",
+      "likelihoods": [
+        0.08,
+        0.08,
+        0.92,
+        0.05
+      ],
+      "informationGainBits": 0.009
+    },
+    "testResult": "leak_confirmed",
+    "disagreement": false,
+    "safetyHold": false,
+    "nominal": false,
+    "needsMoreEvidence": false,
+    "signalStrength": 1,
+    "label": "Evidence updated",
+    "method": "Declared evidence weights updated with assumed test likelihoods. Not learned or clinically/industrially calibrated probabilities. Information gain is model-dependent."
+  },
+  "constraints": {
+    "stock": 15,
+    "leadMinutes": 180,
+    "deadlineMinutes": 90,
+    "testResult": "leak_confirmed"
+  },
+  "caseId": "pressure-leak",
+  "planningSource": "Deterministic extraction from source lines"
+}

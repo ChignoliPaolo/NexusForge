@@ -1,0 +1,8 @@
+.env
+.env.*
+runtime
+artifacts
+.git
+*.zip
+node_modules
+NexusForge-demo.html

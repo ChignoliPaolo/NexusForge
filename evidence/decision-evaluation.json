@@ -1,0 +1,403 @@
+{
+  "generatedAt": "2026-10-15T07:49:30.455Z",
+  "suite": "Synthetic decision-contract evaluation v3",
+  "checks": [
+    {
+      "name": "Unverified leak must ask for evidence",
+      "category": "decision contract",
+      "passed": true,
+      "detail": {
+        "expected": "inspect",
+        "actual": "inspect"
+      }
+    },
+    {
+      "name": "pressure-leak: no blocked plan ranked first",
+      "category": "constraint safety",
+      "passed": true,
+      "detail": {
+        "blockedPlans": [
+          "targeted",
+          "replace"
+        ]
+      }
+    },
+    {
+      "name": "Confirmed leak permits available targeted intervention",
+      "category": "decision contract",
+      "passed": true,
+      "detail": {
+        "expected": "targeted",
+        "actual": "targeted"
+      }
+    },
+    {
+      "name": "pressure-leak: no blocked plan ranked first",
+      "category": "constraint safety",
+      "passed": true,
+      "detail": {
+        "blockedPlans": [
+          "replace"
+        ]
+      }
+    },
+    {
+      "name": "No stock must change the action",
+      "category": "decision contract",
+      "passed": true,
+      "detail": {
+        "expected": "inspect",
+        "actual": "inspect"
+      }
+    },
+    {
+      "name": "pressure-no-stock: no blocked plan ranked first",
+      "category": "constraint safety",
+      "passed": true,
+      "detail": {
+        "blockedPlans": [
+          "targeted",
+          "replace"
+        ]
+      }
+    },
+    {
+      "name": "Contradictory readings must not trigger repair",
+      "category": "decision contract",
+      "passed": true,
+      "detail": {
+        "expected": "inspect",
+        "actual": "inspect"
+      }
+    },
+    {
+      "name": "pressure-contradiction: no blocked plan ranked first",
+      "category": "constraint safety",
+      "passed": true,
+      "detail": {
+        "blockedPlans": [
+          "targeted",
+          "replace"
+        ]
+      }
+    },
+    {
+      "name": "Confirmed independent drive fault changes the diagnosis and plan",
+      "category": "decision contract",
+      "passed": true,
+      "detail": {
+        "expected": "replace",
+        "actual": "replace"
+      }
+    },
+    {
+      "name": "drive-fault: no blocked plan ranked first",
+      "category": "constraint safety",
+      "passed": true,
+      "detail": {
+        "blockedPlans": [
+          "targeted"
+        ]
+      }
+    },
+    {
+      "name": "Cooling confirmation permits containment plan",
+      "category": "decision contract",
+      "passed": true,
+      "detail": {
+        "expected": "targeted",
+        "actual": "targeted"
+      }
+    },
+    {
+      "name": "thermal-drift: no blocked plan ranked first",
+      "category": "constraint safety",
+      "passed": true,
+      "detail": {
+        "blockedPlans": [
+          "replace"
+        ]
+      }
+    },
+    {
+      "name": "Scheduling evidence permits controls-reviewed intervention",
+      "category": "decision contract",
+      "passed": true,
+      "detail": {
+        "expected": "targeted",
+        "actual": "targeted"
+      }
+    },
+    {
+      "name": "energy-overlap: no blocked plan ranked first",
+      "category": "constraint safety",
+      "passed": true,
+      "detail": {
+        "blockedPlans": [
+          "replace"
+        ]
+      }
+    },
+    {
+      "name": "Safety hold overrides even a confirmed fault",
+      "category": "decision contract",
+      "passed": true,
+      "detail": {
+        "expected": "inspect",
+        "actual": "inspect"
+      }
+    },
+    {
+      "name": "safety-hold: no blocked plan ranked first",
+      "category": "constraint safety",
+      "passed": true,
+      "detail": {
+        "blockedPlans": [
+          "targeted",
+          "replace"
+        ]
+      }
+    },
+    {
+      "name": "Nominal readings must not invent a fault",
+      "category": "decision contract",
+      "passed": true,
+      "detail": {
+        "expected": "inspect",
+        "actual": "inspect"
+      }
+    },
+    {
+      "name": "nominal: no blocked plan ranked first",
+      "category": "constraint safety",
+      "passed": true,
+      "detail": {
+        "blockedPlans": [
+          "targeted",
+          "replace"
+        ]
+      }
+    },
+    {
+      "name": "Seed 1: observation changes the action",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "before": "inspect",
+        "after": "targeted"
+      }
+    },
+    {
+      "name": "Seed 1: stock overrides the model",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "actual": "inspect"
+      }
+    },
+    {
+      "name": "Seed 2: observation changes the action",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "before": "inspect",
+        "after": "targeted"
+      }
+    },
+    {
+      "name": "Seed 2: stock overrides the model",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "actual": "inspect"
+      }
+    },
+    {
+      "name": "Seed 3: observation changes the action",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "before": "inspect",
+        "after": "targeted"
+      }
+    },
+    {
+      "name": "Seed 3: stock overrides the model",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "actual": "inspect"
+      }
+    },
+    {
+      "name": "Seed 4: observation changes the action",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "before": "inspect",
+        "after": "targeted"
+      }
+    },
+    {
+      "name": "Seed 4: stock overrides the model",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "actual": "inspect"
+      }
+    },
+    {
+      "name": "Seed 5: observation changes the action",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "before": "inspect",
+        "after": "targeted"
+      }
+    },
+    {
+      "name": "Seed 5: stock overrides the model",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "actual": "inspect"
+      }
+    },
+    {
+      "name": "Seed 6: observation changes the action",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "before": "inspect",
+        "after": "targeted"
+      }
+    },
+    {
+      "name": "Seed 6: stock overrides the model",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "actual": "inspect"
+      }
+    },
+    {
+      "name": "Seed 7: observation changes the action",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "before": "inspect",
+        "after": "targeted"
+      }
+    },
+    {
+      "name": "Seed 7: stock overrides the model",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "actual": "inspect"
+      }
+    },
+    {
+      "name": "Seed 8: observation changes the action",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "before": "inspect",
+        "after": "targeted"
+      }
+    },
+    {
+      "name": "Seed 8: stock overrides the model",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "actual": "inspect"
+      }
+    },
+    {
+      "name": "Seed 9: observation changes the action",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "before": "inspect",
+        "after": "targeted"
+      }
+    },
+    {
+      "name": "Seed 9: stock overrides the model",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "actual": "inspect"
+      }
+    },
+    {
+      "name": "Seed 10: observation changes the action",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "before": "inspect",
+        "after": "targeted"
+      }
+    },
+    {
+      "name": "Seed 10: stock overrides the model",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "actual": "inspect"
+      }
+    },
+    {
+      "name": "Seed 11: observation changes the action",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "before": "inspect",
+        "after": "targeted"
+      }
+    },
+    {
+      "name": "Seed 11: stock overrides the model",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "actual": "inspect"
+      }
+    },
+    {
+      "name": "Seed 12: observation changes the action",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "before": "inspect",
+        "after": "targeted"
+      }
+    },
+    {
+      "name": "Seed 12: stock overrides the model",
+      "category": "seeded perturbation",
+      "passed": true,
+      "detail": {
+        "actual": "inspect"
+      }
+    },
+    {
+      "name": "Intervention delay cannot lower a fixed plan cost",
+      "category": "numerical consistency",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Every cost reconciles to its components",
+      "category": "numerical consistency",
+      "passed": true,
+      "detail": {}
+    }
+  ],
+  "total": 44,
+  "passed": 44,
+  "elapsedMs": 9.71,
+  "disclosure": "Synthetic authored cases and seeded perturbations. This evaluates declared decision contracts, not field accuracy or AMD model quality. Fixture design and solver share engineering assumptions; this is not an independent scientific benchmark.",
+  "liveModelEvaluated": false
+}
