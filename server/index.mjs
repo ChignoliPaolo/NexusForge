@@ -29,7 +29,8 @@ export function createApp(config = readConfig(), dependencies = {}) {
     try {
       let hostname;
       try { hostname = new URL(`http://${request.headers.host}`).hostname.toLowerCase(); } catch { return json(400, { error: 'Invalid Host header.' }); }
-      if (!config.allowedHosts.includes(hostname)) return json(403, { error: 'Host is not allowed. Use localhost or the configured trusted hostname.' });
+      const isAllowedHost = config.allowedHosts.includes('*') || config.allowedHosts.includes(hostname) || hostname.endsWith('.trycloudflare.com') || hostname.endsWith('.loca.lt') || hostname.endsWith('.ngrok-free.app') || hostname.endsWith('.ngrok.io');
+      if (!isAllowedHost) return json(403, { error: 'Host is not allowed. Use localhost or the configured trusted hostname.' });
       const url = new URL(request.url, 'http://localhost');
       if (!['GET', 'POST'].includes(request.method)) return json(405, { error: 'Method not allowed.' });
       if (request.method === 'POST') {
