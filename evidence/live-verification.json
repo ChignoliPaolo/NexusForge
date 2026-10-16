@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-10-14T07:40:58.200Z",
-  "status": "unverified",
+  "checkedAt": "2026-10-16T08:42:00.074Z",
+  "status": "live_model_verified_evolus_incomplete",
   "configuration": {
     "amd": {
       "configured": true,
@@ -10,14 +10,9 @@
       "modelDiscovery": false
     },
     "evolus": {
-      "configured": false,
-      "status": "Setup required",
-      "missing": [
-        "EVOLUS_AGENT_ID",
-        "EVOLUS_KNOWLEDGE_PATH",
-        "EVOLUS_EXTRACTOR_PATH",
-        "EVOLUS_WORKFLOW_PATH"
-      ]
+      "configured": true,
+      "status": "Configured · ready",
+      "missing": []
     },
     "telemetry": {
       "gpuUtilization": null,
@@ -25,12 +20,40 @@
       "note": "No hardware telemetry is exposed by this application. API timings appear only after an actual request."
     }
   },
-  "model": null,
-  "blocks": [],
+  "model": {
+    "hypothesis": "Pneumatic leakage has the strongest relative support in the declared evidence model. This remains a hypothesis.",
+    "rationale": "The declared diagnostic model assigns the highest weight (0.9137) to pneumatic leakage, supported by the co-varying pressure decrease and torque increase. The operator-supplied observation 'leak_confirmed' further updates the model in favor of this hypothesis. The targeted repair plan is feasible and aligns with the evidence, while the conventional drive replacement is infeasible due to lack of justification and exceeding the production deadline.",
+    "uncertainty": "Relative support scores and test likelihoods are declared assumptions, not calibrated probabilities. The 'leak_confirmed' observation is synthetic and not a performed physical test. A qualified human must verify the leak and approve any intervention.",
+    "evidenceIds": [
+      "OBS-01",
+      "REF-01",
+      "MODEL-01",
+      "TEST-01"
+    ],
+    "recommendedPlanId": "targeted",
+    "nextObservationId": "drive",
+    "provider": "Evolus agent · workspace model",
+    "model": "f3b3ae8e-231f-4655-b5a1-b9b451dd3a2b:498a1ee6-9757-4ffa-967b-a4230c6d2043",
+    "latencyMs": 14335,
+    "usage": null,
+    "endToEndTokensPerSecond": null
+  },
+  "blocks": [
+    {
+      "name": "Knowledge library",
+      "status": "unavailable",
+      "detail": "Evolus building block is not configured. Copy its endpoint and configure the workspace first."
+    },
+    {
+      "name": "Document extractor",
+      "status": "unavailable",
+      "detail": "Evolus building block is not configured. Copy its endpoint and configure the workspace first."
+    }
+  ],
   "workflowExecuted": false,
   "safety": "This command never approves a work order or invokes a business workflow.",
   "preflight": {
-    "checkedAt": "2026-10-14T07:40:58.906Z",
+    "checkedAt": "2026-10-16T08:42:00.852Z",
     "checks": {
       "amd": {
         "status": "model_configured_not_verified",
@@ -40,11 +63,16 @@
       "evolus": {
         "status": "configuration_only",
         "applicationConfigured": true,
-        "agentConfigured": false,
+        "agentConfigured": true,
         "blocksConfigured": false,
         "note": "Workspace discovery and exact schema inspection: npm run verify:live. Actual building-block success requires a live investigation."
       }
     }
   },
-  "error": "Provider unreachable or timed out. No external action is confirmed."
+  "decision": {
+    "planId": "targeted",
+    "caseId": "pressure-leak",
+    "inputProvenance": "synthetic",
+    "planningSource": "Deterministic extraction from source lines"
+  }
 }
